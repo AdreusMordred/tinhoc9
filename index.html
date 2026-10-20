@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trắc nghiệm Ôn tập Tin học 9 - Chủ đề 1, 2, 3</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="bg-indigo-600 text-white shadow-md py-6 px-4 mb-6">
+        <div class="max-w-4xl mx-auto text-center">
+            <h1 class="text-2xl md:text-3xl font-bold mb-2">Trắc Nghiệm Ôn Tập Tin Học Lớp 9</h1>
+            <p class="text-indigo-100 text-sm md:text-base">Chủ đề 1, Chủ đề 2 & Chủ đề 3 (SGK Kết nối tri thức với cuộc sống)</p>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-4xl mx-auto px-4 flex-grow w-full pb-12">
+        <!-- Intro Card -->
+        <div id="intro-card" class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-6 text-center">
+            <h2 class="text-xl font-semibold mb-2 text-indigo-700">Hướng dẫn làm bài trắc nghiệm</h2>
+            <p class="text-slate-600 mb-4">Bài ôn tập gồm 40 câu hỏi trắc nghiệm 4 lựa chọn (A, B, C, D). Hãy chọn đáp án đúng nhất cho mỗi câu hỏi. Sau khi nộp bài, hệ thống sẽ chấm điểm và hiển thị giải thích chi tiết.</p>
+            <button onclick="startQuiz()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 py-2.5 rounded-lg transition-colors shadow">Bắt đầu làm bài</button>
+        </div>
+
+        <!-- Quiz Form Container -->
+        <form id="quiz-form" class="hidden space-y-6">
+            <div id="questions-container" class="space-y-6">
+                <!-- Questions will be injected here via JavaScript -->
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center pt-4">
+                <button type="button" onclick="submitQuiz()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-8 py-3 rounded-xl transition-colors shadow-md text-lg">Nộp bài & Xem kết quả</button>
+            </div>
+        </form>
+
+        <!-- Result Section -->
+        <div id="result-container" class="hidden bg-white rounded-xl shadow-md border border-slate-200 p-8 mt-6 text-center">
+            <h2 class="text-2xl font-bold mb-3 text-indigo-700">Kết quả bài làm</h2>
+            <div id="score-display" class="text-4xl font-extrabold text-slate-800 mb-4"></div>
+            <p id="feedback-message" class="text-slate-600 mb-6"></p>
+            <button onclick="resetQuiz()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 py-2 rounded-lg transition-colors">Làm lại bài</button>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-200 text-slate-600 text-center py-4 text-sm mt-auto">
+        <p>Hệ thống Ôn tập trắc nghiệm Tin học 9</p>
+    </footer>
+
+    <!-- Script Data & Logic -->
+    <script>
+        const questionsData = [
+            // --- CHỦ ĐỀ 1: MÁY TÍNH VÀ CỘNG ĐỒNG ---
+            {
+                id: 1,
+                topic: "Chủ đề 1: Thế giới kĩ thuật số",
+                question: "Bộ xử lí thông tin (bộ xử lí) thường được xem là thành phần quan trọng và được ví như gì của máy tính?",
+                options: [
+                    "A. 'Trái tim' của máy tính",
+                    "B. 'Bộ não' của máy tính",
+                    "C. 'Đôi mắt' của máy tính",
+                    "D. 'Cánh tay' của máy tính"
+                ],
+                answer: 1, // Index của đáp án đúng (B)
+                explanation: "Bộ xử lí là thành phần quan trọng của máy tính, thường được gọi là 'bộ não' của máy tính[span_1](start_span)[span_1](end_span)."
+            },
+            {
+                id: 2,
+                topic: "Chủ đề 1: Thế giới kĩ thuật số",
+                question: "Thiết bị nào sau đây KHÔNG được gắn bộ xử lí thông tin?",
+                options: [
+                    "A. Ti vi kĩ thuật số",
+                    "B. Tủ lạnh thông minh",
+                    "C. Thước kẻ gỗ thông thường",
+                    "D. Máy giặt tự động"
+                ],
+                answer: 2,
+                explanation: "Thước kẻ gỗ thông thường là dụng cụ học tập đơn giản, không có linh kiện điện tử hay bộ xử lí thông tin."
+            },
+            {
+                id: 3,
+                topic: "Chủ đề 1: Thế giới kĩ thuật số",
+                question: "Phát biểu nào sau đây là KHÍ ĐÚNG về khả năng của máy tính?",
+                options: [
+                    "A. Máy tính có thể thực hiện hàng tỉ phép tính trong một giây.",
+                    "B. Máy tính có khả năng lưu trữ dữ liệu dung lượng lớn.",
+                    "C. Máy tính bị mệt mỏi và giảm độ chính xác khi làm việc lâu.",
+                    "D. Máy tính có thể kết nối toàn cầu với tốc độ cao qua Internet."
+                ],
+                answer: 2,
+                explanation: "Máy tính hoạt động bền bỉ, không bị mệt mỏi hay giảm độ chính xác khi làm việc lâu. Do đó phương án C là phát biểu không đúng."
+            },
+            {
+                id: 4,
+                topic: "Chủ đề 1: Thế giới kĩ thuật số",
+                question: "Loại máy tính nào được sử dụng để thực hiện những tính toán cực kì phức tạp như dự báo thời tiết, nghiên cứu vũ trụ, hóa học và vật lý?",
+                options: [
+                    "A. Máy tính cầm tay",
+                    "B. Máy tính bảng",
+                    "C. Siêu máy tính",
+                    "D. Máy tính xách tay mini"
+                ],
+                answer: 2,
+                explanation: "Siêu máy tính được sử dụng để thực hiện những tính toán phức tạp trong hóa học, vật lí, công nghệ kết cấu hay dự báo thời tiết[span_2](start_span)[span_2](end_span)."
+            },
+            {
+                id: 5,
+                topic: "Chủ đề 1: Thế giới kĩ thuật số",
+                question: "Kính viễn vọng không gian Hubble là một ví dụ về ứng dụng của công nghệ thông tin trong lĩnh vực nào?",
+                options: [
+                    "A. Nghiên cứu vũ trụ",
+                    "B. Thương mại điện tử",
+                    "C. Nông nghiệp công nghệ cao",
+                    "D. Giải trí trực tuyến"
+                ],
+                answer: 0,
+                explanation: "Công nghệ thông tin được ứng dụng trên các vệ tinh nhân tạo để nghiên cứu vũ trụ, ví dụ như kính viễn vọng không gian Hubble[span_3](start_span)[span_3](end_span)."
+            },
+            {
+                id: 6,
+                topic: "Chủ đề 1: Thế giới kĩ thuật số",
+                question: "Tác động tích cực của công nghệ thông tin đối với giao tiếp con người là gì?",
+                options: [
+                    "A. Làm con người xa cách nhau hơn.",
+                    "B. Giúp con người giao tiếp hiệu quả, giảm bớt sự phụ thuộc vào không gian và thời gian.",
+                    "C. Khiến việc truyền tải thông tin trở nên chậm chạp hơn.",
+                    "D. Ngăn cản việc trò chuyện từ xa."
+                ],
+                answer: 1,
+                explanation: "Công nghệ thông tin đem đến các phương tiện giao tiếp hiệu quả giúp con người giảm bớt sự phụ thuộc vào không gian và thời gian[span_4](start_span)[span_4](end_span)."
+            },
+            {
+                id: 7,
+                topic: "Chủ đề 1: Thế giới kĩ thuật số",
+                question: "Việc sử dụng công nghệ số không đúng cách (như chơi game quá nhiều, liên tục) có thể dẫn đến hậu quả tiêu cực nào?",
+                options: [
+                    "A. Gây nghiện Internet và ảnh hưởng xấu đến sức khỏe.",
+                    "B. Giúp cơ thể khỏe mạnh hơn.",
+                    "C. Tăng cường khả năng giao tiếp ngoài đời thực.",
+                    "D. Nâng cao thị lực."
+                ],
+                answer: 0,
+                explanation: "Chơi game quá nhiều, liên tục có thể gây nghiện, ảnh hưởng xấu đến sức khỏe thể chất và tinh thần[span_5](start_span)[span_5](end_span)."
+            },
+            {
+                id: 8,
+                topic: "Chủ đề 1: Thế giới kĩ thuật số",
+                question: "Hệ thống thu phí tự động trên đường cao tốc thuộc lĩnh vực ứng dụng nào của thiết bị có gắn bộ xử lí?",
+                options: [
+                    "A. Y tế",
+                    "B. Giáo dục",
+                    "C. Giao thông",
+                    "D. Nông nghiệp"
+                ],
+                answer: 2,
+                explanation: "Hệ thống thu phí tự động trên đường cao tốc là ví dụ về thiết bị có gắn bộ xử lí trong lĩnh vực giao thông[span_6](start_span)[span_6](end_span)."
+            },
+            {
+                id: 9,
+                topic: "Chủ đề 1: Thế giới kĩ thuật số",
+                question: "Đâu KHÔNG phải là một tác động tích cực của công nghệ thông tin lên giáo dục?",
+                options: [
+                    "A. Giúp chia sẻ kiến thức, kĩ năng mọi lúc, mọi nơi qua Internet.",
+                    "B. Cung cấp nhiều nguồn học liệu miễn phí.",
+                    "C. Học sinh hoàn toàn phụ thuộc vào trí tuệ nhân tạo để làm bài tập thay tư duy.",
+                    "D. Giúp tiếp cận tri thức mới nhanh chóng."
+                ],
+                answer: 2,
+                explanation: "Việc phụ thuộc vào trí tuệ nhân tạo để làm bài tập là tác động tiêu cực, biểu hiện của sự lệ thuộc vào công nghệ[span_7](start_span)[span_7](end_span)."
+            },
+            {
+                id: 10,
+                topic: "Chủ đề 1: Thế giới kĩ thuật số",
+                question: "Yếu tố nào quyết định việc công nghệ thông tin đem lại tác động có lợi hay có hại cho xã hội?",
+                options: [
+                    "A. Do bản thân chiếc máy tính quyết định.",
+                    "B. Do cách chúng ta sử dụng công nghệ thông tin.",
+                    "C. Do nhà sản xuất thiết bị quyết định.",
+                    "D. Do tốc độ đường truyền mạng Internet."
+                ],
+                answer: 1,
+                explanation: "Cách chúng ta sử dụng công nghệ thông tin sẽ quyết định tác động của nó có lợi hay có hại cho xã hội[span_8](start_span)[span_8](end_span)."
+            },
+
+            // --- CHỦ ĐỀ 2: TỔ CHỨC LƯU TRỮ, TÌM KIẾM VÀ TRAO ĐỔI THÔNG TIN ---
+            {
+                id: 11,
+                topic: "Chủ đề 2: Thông tin trong giải quyết vấn đề",
+                question: "Yếu tố nào dưới đây thực sự làm cho thông tin trở nên hữu ích trong việc giải quyết vấn đề?",
+                options: [
+                    "A. Số lượng bản tin thật nhiều",
+                    "B. Chất lượng của thông tin",
+                    "C. Tốc độ gõ phím khi tìm kiếm",
+                    "D. Màu sắc của trang web chứa thông tin"
+                ],
+                answer: 1,
+                explanation: "Không phải số lượng bản tin mà là chất lượng của thông tin mới thực sự làm cho thông tin trở thành hữu ích[span_9](start_span)[span_9](end_span)."
+            },
+            {
+                id: 12,
+                topic: "Chủ đề 2: Thông tin trong giải quyết vấn đề",
+                question: "Chất lượng thông tin được đánh giá thông qua mấy tiêu chí chính?",
+                options: [
+                    "A. 2 tiêu chí",
+                    "B. 3 tiêu chí",
+                    "C. 4 tiêu chí",
+                    "D. 5 tiêu chí"
+                ],
+                answer: 2,
+                explanation: "Để đánh giá chất lượng thông tin, cần xem xét 4 tiêu chí: tính mới, tính chính xác, tính đầy đủ, tính sử dụng được[span_10](start_span)[span_10](end_span)."
+            },
+            {
+                id: 13,
+                topic: "Chủ đề 2: Thông tin trong giải quyết vấn đề",
+                question: "Tiêu chí nào cho biết thông tin đã bị lỗi thời, cũ hoặc chậm trễ hay chưa?",
+                options: [
+                    "A. Tính mới (tính cập nhật)",
+                    "B. Tính chính xác",
+                    "C. Tính đầy đủ",
+                    "D. Tính sử dụng được"
+                ],
+                answer: 0,
+                explanation: "Tính mới (tính cập nhật) cho biết thông tin đã bị lỗi thời chưa, cần được cập nhật gần nhất vào thời gian nào[span_11](start_span)[span_11](end_span)."
+            },
+            {
+                id: 14,
+                topic: "Chủ đề 2: Thông tin trong giải quyết vấn đề",
+                question: "Nếu một thông tin tuyển sinh bị sai điểm chuẩn hoặc sai địa chỉ trường, thông tin đó đã vi phạm tiêu chí nào?",
+                options: [
+                    "A. Tính mới",
+                    "B. Tính chính xác",
+                    "C. Tính đầy đủ",
+                    "D. Tính sử dụng được"
+                ],
+                answer: 1,
+                explanation: "Nếu thông tin không chính xác (ví dụ sai điểm chuẩn, sai tên, địa chỉ) sẽ dẫn đến nhầm lẫn[span_12](start_span)[span_12](end_span)[span_13](start_span)[span_13](end_span)."
+            },
+            {
+                id: 15,
+                topic: "Chủ đề 2: Thông tin trong giải quyết vấn đề",
+                question: "Tiêu chí 'Tính đầy đủ' của thông tin thể hiện điều gì?",
+                options: [
+                    "A. Thông tin được cập nhật từng giây.",
+                    "B. Thông tin bao quát nhiều khía cạnh, cho cái nhìn tổng thể về vấn đề.",
+                    "C. Thông tin hoàn toàn mới lạ chưa từng xuất hiện.",
+                    "D. Thông tin ngắn gọn nhất có thể."
+                ],
+                answer: 1,
+                explanation: "Tính đầy đủ thể hiện sự bao quát nhiều khía cạnh, cho em có được cái nhìn tổng thể về vấn đề được đặt ra[span_14](start_span)[span_14](end_span)."
+            },
+            {
+                id: 16,
+                topic: "Chủ đề 2: Thông tin trong giải quyết vấn đề",
+                question: "Khi cần tìm kiếm thông tin chính thức về điểm chuẩn và quy chế tuyển sinh vào lớp 10 THPT, ta nên tìm ở nguồn nào đáng tin cậy nhất?",
+                options: [
+                    "A. Các trang mạng xã hội cá nhân",
+                    "B. Website của Sở Giáo dục và Đào tạo",
+                    "C. Các trang web giải trí tổng hợp",
+                    "D. Các nhóm trò chuyện trực tuyến không rõ nguồn gốc"
+                ],
+                answer: 1,
+                explanation: "Thông tin về tuyển sinh cần tìm trên website của Sở Giáo dục và Đào tạo để đảm bảo thẩm quyền và độ tin cậy[span_15](start_span)[span_15](end_span)."
+            },
+            {
+                id: 17,
+                topic: "Chủ đề 2: Thông tin trong giải quyết vấn đề",
+                question: "Thuật ngữ KOL (Key Opinion Leader) viết tắt cho khái niệm gì?",
+                options: [
+                    "A. Người làm công nghệ lớn",
+                    "B. Người dẫn dắt dư luận chủ chốt / người có ảnh hưởng",
+                    "C. Kỹ sư tối ưu hóa liên kết",
+                    "D. Khoa học máy tính trực tuyến"
+                ],
+                answer: 1,
+                explanation: "KOL là thuật ngữ viết tắt của Key Opinion Leader có nghĩa là người dẫn dắt dư luận chủ chốt hay người có ảnh hưởng[span_16](start_span)[span_16](end_span)."
+            },
+            {
+                id: 18,
+                topic: "Chủ đề 2: Thông tin trong giải quyết vấn đề",
+                question: "Tính sử dụng được (tính liên quan) của thông tin có ý nghĩa gì?",
+                options: [
+                    "A. Thông tin có phù hợp và đáp ứng yêu cầu giải quyết câu hỏi đặt ra hay không.",
+                    "B. Thông tin có được chia sẻ nhiều trên Facebook hay không.",
+                    "C. Tệp chứa thông tin có dung lượng nhẹ hay nặng.",
+                    "D. Thông tin có được in ra màu đẹp hay không."
+                ],
+                answer: 0,
+                explanation: "Tính sử dụng được là mức độ liên quan, phù hợp của thông tin với vấn đề hay câu hỏi được đặt ra[span_17](start_span)[span_17](end_span)."
+            },
+            {
+                id: 19,
+                topic: "Chủ đề 2: Thông tin trong giải quyết vấn đề",
+                question: "Khi đọc thông tin quảng cáo sản phẩm từ một người có ảnh hưởng (KOL) trên mạng, em nên có ứng xử nào hợp lý nhất?",
+                options: [
+                    "A. Lập tức tin tưởng và mua ngay vì họ là người nổi tiếng.",
+                    "B. Chia sẻ ngay cho tất cả mọi người mà không cần kiểm tra.",
+                    "C. Cân nhắc, đánh giá chất lượng thông tin trước khi sử dụng sản phẩm.",
+                    "D. Tuyệt đối không bao giờ xem các trang mạng xã hội."
+                ],
+                answer: 2,
+                explanation: "Cần cân nhắc, đánh giá chất lượng thông tin trước khi sử dụng sản phẩm hoặc tin tưởng nguồn tin[span_18](start_span)[span_18](end_span)."
+            },
+            {
+                id: 20,
+                topic: "Chủ đề 2: Thông tin trong giải quyết vấn đề",
+                question: "Trang web của các Sở Giáo dục và Đào tạo ở Việt Nam thường có tên miền mang dạng đặc trưng nào?",
+                options: [
+                    "A. .com",
+                    "B. .org",
+                    "C. .edu.vn",
+                    "D. .net"
+                ],
+                answer: 2,
+                explanation: "Trang web các Sở Giáo dục và Đào tạo thường có dạng edu.vn (ví dụ vinhphuc.edu.vn)[span_19](start_span)[span_19](end_span)."
+            },
+
+            // --- CHỦ ĐỀ 3: ĐẠO ĐỨC, PHÁP LUẬT VÀ VĂN HÓA TRONG MÔI TRƯỜNG SỐ ---
+            {
+                id: 21,
+                topic: "Chủ đề 3: Đạo đức, pháp luật và văn hóa số",
+                question: "Hành vi nào sau đây là tác động tiêu cực của công nghệ kĩ thuật số đối với quyền riêng tư của con người?",
+                options: [
+                    "A. Tra cứu tài liệu học tập nhanh chóng.",
+                    "B. Thông tin cá nhân bị rò rỉ và sử dụng bất hợp pháp do dữ liệu bị đánh cắp.",
+                    "C. Đặt vé máy bay trực tuyến tiện lợi.",
+                    "D. Gửi thư điện tử cho bạn bè ở xa."
+                ],
+                answer: 1,
+                explanation: "Tác động tiêu cực đến quyền riêng tư là thông tin cá nhân có thể bị rò rỉ và sử dụng bất hợp pháp vì dữ liệu số bị đánh cắp dễ dàng hơn[span_20](start_span)[span_20](end_span)[span_21](start_span)[span_21](end_span)."
+            },
+            {
+                id: 22,
+                topic: "Chủ đề 3: Đạo đức, pháp luật và văn hóa số",
+                question: "Hành vi nào dưới đây vi phạm pháp luật khi hoạt động trong môi trường số?",
+                options: [
+                    "A. Chúc mừng sinh nhật bạn trên Facebook.",
+                    "B. Sử dụng phần mềm có bản quyền đầy đủ.",
+                    "C. Đăng hình ảnh, video bôi nhọ, xúc phạm danh dự cá nhân lên mạng.",
+                    "D. Tìm kiếm thông tin khoa học trên Google."
+                ],
+                answer: 2,
+                explanation: "Đăng hình ảnh, video bôi nhọ, xúc phạm tập thể hoặc cá nhân là hành vi vi phạm pháp luật và thiếu văn hóa[span_22](start_span)[span_22](end_span)."
+            },
+            {
+                id: 23,
+                topic: "Chủ đề 3: Đạo đức, pháp luật và văn hóa số",
+                question: "Luật Công nghệ thông tin số 67/2006/QH11 được Quốc hội nước ta ban hành vào năm nào?",
+                options: [
+                    "A. Năm 2000",
+                    "B. Năm 2006",
+                    "C. Năm 2013",
+                    "D. Năm 2018"
+                ],
+                answer: 1,
+                explanation: "Năm 2006, Quốc hội ban hành Luật Công nghệ thông tin số 67/2006/QH11[span_23](start_span)[span_23](end_span)."
+            },
+            {
+                id: 24,
+                topic: "Chủ đề 3: Đạo đức, pháp luật và văn hóa số",
+                question: "Nghị định số 72/2013/NĐ-CP do Chính phủ ban hành quy định chi tiết về vấn đề gì?",
+                options: [
+                    "A. Quản lý, cung cấp, sử dụng dịch vụ Internet và thông tin trên mạng",
+                    "B. Quy định về giao thông đường bộ",
+                    "C. Bộ luật lao động",
+                    "D. Quy định về bảo vệ môi trường rừng"
+                ],
+                answer: 0,
+                explanation: "Nghị định số 72/2013/NĐ-CP quy định chi tiết việc quản lí, cung cấp, sử dụng dịch vụ Internet, thông tin trên mạng[span_24](start_span)[span_24](end_span)."
+            },
+            {
+                id: 25,
+                topic: "Chủ đề 3: Đạo đức, pháp luật và văn hóa số",
+                question: "Luật An ninh mạng ở Việt Nam được ban hành vào năm nào?",
+                options: [
+                    "A. Năm 2006",
+                    "B. Năm 2013",
+                    "C. Năm 2018",
+                    "D. Năm 2020"
+                ],
+                answer: 2,
+                explanation: "Năm 2018, Quốc hội ban hành Luật An ninh mạng quy định về hoạt động bảo vệ an ninh quốc gia và trật tự, an toàn xã hội trên không gian mạng[span_25](start_span)[span_25](end_span)."
+            },
+            {
+                id: 26,
+                topic: "Chủ đề 3: Đạo đức, pháp luật và văn hóa số",
+                question: "Hành vi sử dụng dữ liệu hoặc phần mềm của người khác mà không xin phép, không có bản quyền thuộc nhóm hành vi nào?",
+                options: [
+                    "A. Vi phạm pháp luật về sở hữu trí tuệ",
+                    "B. Hoạt động từ thiện hợp pháp",
+                    "C. Đóng góp tích cực cho cộng đồng",
+                    "D. Thể hiện văn hóa ứng xử cao đẹp"
+                ],
+                answer: 0,
+                explanation: "Sử dụng dữ liệu của người khác không xin phép hay sử dụng phần mềm không có bản quyền là hành vi vi phạm pháp luật (sở hữu trí tuệ)[span_26](start_span)[span_26](end_span)[span_27](start_span)[span_27](end_span)."
+            },
+            {
+                id: 27,
+                topic: "Chủ đề 3: Đạo đức, pháp luật và văn hóa số",
+                question: "Hành vi gửi thư rác, tin nhắn rác với mục đích quảng cáo khi người nhận không muốn nhận được xem là gì?",
+                options: [
+                    "A. Hành vi quấy nhiễu, làm phiền người khác",
+                    "B. Một hình thức nghệ thuật đương đại",
+                    "C. Hoạt động ngoại khóa hữu ích",
+                    "D. Việc làm được pháp luật khuyến khích"
+                ],
+                answer: 0,
+                explanation: "Gửi thư rác hay tin nhắn rác liên tục khi người nhận đã phản ứng không muốn nhận sẽ trở thành hành vi quấy nhiễu[span_28](start_span)[span_28](end_span)."
+            },
+            {
+                id: 28,
+                topic: "Chủ đề 3: Đạo đức, pháp luật và văn hóa số",
+                question: "Nhận được một tin nhắn lạ qua mạng yêu cầu nhấp vào liên kết để nhận quà trúng thưởng lớn, em nên ứng xử như thế nào?",
+                options: [
+                    "A. Nhấp vào ngay để nhận thưởng vì cơ hội hiếm có.",
+                    "B. Cảnh giác, không nhấp vào liên kết lạ và không chia sẻ thông tin cá nhân.",
+                    "C. Gửi liên kết đó cho tất cả bạn bè trong danh sách.",
+                    "D. Tải xuống tất cả các tệp theo hướng dẫn trong liên kết."
+                ],
+                answer: 1,
+                explanation: "Cần cảnh giác với các liên kết lừa đảo nhận thưởng, giả mạo để tránh bị đánh cắp thông tin tài khoản hoặc dính mã độc[span_29](start_span)[span_29](end_span)[span_30](start_span)[span_30](end_span)."
+            },
+            {
+                id: 29,
+                topic: "Chủ đề 3: Đạo đức, pháp luật và văn hóa số",
+                question: "Hành vi nào sau đây bị NGHIÊM CẤM theo quy định pháp luật khi hoạt động trên không gian mạng?",
+                options: [
+                    "A. Tuyên truyền, quảng cáo dịch vụ cấm (như vũ khí, động vật quý hiếm trái phép).",
+                    "B. Đăng ảnh phong cảnh thiên nhiên đẹp.",
+                    "C. Nhắn tin hỏi bài tập về nhà với bạn học.",
+                    "D. Tìm kiếm tài liệu học môn Tin học."
+                ],
+                answer: 0,
+                explanation: "Hành vi tuyên truyền, quảng cáo, giới thiệu sản phẩm, dịch vụ không phù hợp quy định pháp luật (như vũ khí, động vật quý hiếm) là hành vi bị cấm[span_31](start_span)[span_31](end_span)."
+            },
+            {
+                id: 30,
+                topic: "Chủ đề 3: Đạo đức, pháp luật và văn hóa số",
+                question: "Phát biểu nào sau đây là ĐÚNG khi bàn về văn hóa ứng xử trong môi trường số?",
+                options: [
+                    "A. Trên mạng xã hội muốn nói gì cũng được vì không ai biết mình là ai.",
+                    "B. Cần tôn trọng người đối thoại, dùng ngôn ngữ lịch sự, có văn hóa và tránh từ ngữ phản cảm.",
+                    "C. Có quyền lăng mạ người khác nếu mình không thích họ.",
+                    "D. Không cần tuân thủ bất kỳ quy tắc đạo đức nào khi online."
+                ],
+                answer: 1,
+                explanation: "Khi hoạt động trong môi trường số, người sử dụng cần có trách nhiệm, không vi phạm pháp luật và ứng xử lành mạnh, có văn hóa[span_32](start_span)[span_32](end_span)."
+            },
+            {
+                id: 31,
+                topic: "Chủ đề 3: Đạo đức, pháp luật và văn hóa số",
+                question: "Rác thải điện tử sinh ra từ việc các thiết bị số nhanh chóng trở thành lỗi thời gây tác động như thế nào?",
+                options: [
+                    "A. Làm sạch nguồn nước ngọt",
+                    "B. Gây nguy hại cho môi trường nếu không xử lí đúng cách",
+                    "C. Cải thiện độ phì nhiêu của đất",
+                    "D. Giúp giảm thiểu ô nhiễm không khí"
+                ],
+                answer: 1,
+                explanation: "Công nghệ phát triển khiến thiết bị số nhanh chóng lỗi thời, thải ra lượng rác thải điện tử nguy hại cho môi trường[span_33](start_span)[span_33](end_span)."
+            },
+            {
+                id: 32,
+                topic: "Chủ đề 3: Đạo đức, pháp luật và văn hóa số",
+                question: "Hành vi tự ý chia sẻ đoạn văn, bài thơ hoặc phần mềm bản quyền của người khác lên mạng khi chưa được phép là vi phạm lĩnh vực nào?",
+                options: [
+                    "A. Sở hữu trí tuệ",
+                    "B. Giao thông đường thủy",
+                    "C. Y tế cộng đồng",
+                    "D. Kiến trúc xây dựng"
+                ],
+                answer: 0,
+                explanation: "Đây là hành vi vi phạm pháp luật liên quan đến sở hữu trí tuệ[span_34](start_span)[span_34](end_span)."
+            },
+            {
+                id: 33,
+                topic: "Chủ đề 3: Đạo đức, pháp luật và văn hóa số",
+                question: "Cách nào giúp em tránh được các tác động tiêu cực về sức khỏe khi sử dụng công nghệ kĩ thuật số?",
+                options: [
+                    "A. Sử dụng điện thoại liên tục 24/7 không nghỉ.",
+                    "B. Vừa ăn vừa xem video suốt cả ngày.",
+                    "C. Không sử dụng thiết bị số trong thời gian dài và liên tục, kết hợp tập thể dục thể thao.",
+                    "D. Thức khuya chơi game thâu đêm."
+                ],
+                answer: 2,
+                explanation: "Không sử dụng thiết bị số trong thời gian dài liên tục và tham gia luyện tập thể dục thể thao giúp tránh tác động tiêu cực[span_35](start_span)[span_35](end_span)."
+            },
+            {
+                id: 34,
+                topic: "Chủ đề 3: Đạo đức, pháp luật và văn hóa số",
+                question: "Hành vi xuyên tạc lịch sử, phủ nhận thành tựu cách mạng trên không gian mạng là hành vi:",
+                options: [
+                    "A. Được pháp luật cho phép",
+                    "B. Vi phạm pháp luật nghiêm trọng về an ninh quốc gia, trật tự an toàn xã hội",
+                    "C. Thể hiện sự sáng tạo cá nhân",
+                    "D. Bình thường và vô hại"
+                ],
+                answer: 1,
+                explanation: "Đây là các hành vi bị nghiêm cấm liên quan đến xuyên tạc lịch sử, phá hoại khối đại đoàn kết toàn dân tộc[span_36](start_span)[span_36](end_span)."
+            },
+            {
+                id: 35,
+                topic: "Chủ đề 3: Đạo đức, pháp luật và văn hóa số",
+                question: "Việc vô tình chia sẻ thông tin giả mạo, chưa kiểm chứng trên mạng xã hội đồng nghĩa với việc gì?",
+                options: [
+                    "A. Giúp mọi người giải trí",
+                    "B. Vô tình tiếp tay cho kẻ xấu phát tán thông tin vi phạm pháp luật",
+                    "C. Đóng góp tích cực cho báo chí",
+                    "D. Nâng cao hiểu biết chung"
+                ],
+                answer: 1,
+                explanation: "Không xem xét kĩ mà đã chia sẻ thông tin chưa kiểm chứng là vô tình tiếp tay cho kẻ xấu phát tán thông tin vi phạm pháp luật[span_37](start_span)[span_37](end_span)."
+            },
+            {
+                id: 36,
+                topic: "Chủ đề 3: Đạo đức, pháp luật và văn hóa số",
+                question: "Hành vi lập ra các trang web cá cược, đánh bạc trực tuyến trái phép trên mạng bị xử lý thế nào?",
+                options: [
+                    "A. Được khích lệ phát triển",
+                    "B. Là hành vi vi phạm pháp luật nghiêm trọng",
+                    "C. Không bị quản lý bởi luật pháp",
+                    "D. Được cấp phép hoạt động tự do"
+                ],
+                answer: 1,
+                explanation: "Truy cập hoặc tổ chức trang web đánh bạc trực tuyến trái pháp luật là hành vi vi phạm pháp luật[span_38](start_span)[span_38](end_span)."
+            },
+            {
+                id: 37,
+                topic: "Chủ đề 3: Đạo đức, pháp luật và văn hóa số",
+                question: "Lợi ích lớn nhất của việc nắm vững các quy định pháp luật khi sử dụng Internet là gì?",
+                options: [
+                    "A. Giúp sử dụng không gian mạng có trách nhiệm, an toàn và không vi phạm pháp luật.",
+                    "B. Trở thành hacker chuyên nghiệp.",
+                    "C. Kiếm được thật nhiều tiền từ việc phát tán tin giả.",
+                    "D. Tránh hoàn toàn việc sử dụng máy tính."
+                ],
+                answer: 0,
+                explanation: "Người sử dụng Internet phải trang bị kiến thức cần thiết để bảo đảm sử dụng không gian mạng có trách nhiệm, không vi phạm pháp luật[span_39](start_span)[span_39](end_span)."
+            },
+            {
+                id: 38,
+                topic: "Chủ đề 3: Đạo đức, pháp luật và văn hóa số",
+                question: "Hành vi dùng hình ảnh, video nhằm chế nhạo, hạ nhục, quấy rối bạn học trên mạng (bắt nạt qua mạng) gây hậu quả gì?",
+                options: [
+                    "A. Giúp nạn nhân học tập giỏi hơn.",
+                    "B. Gây tổn thương nặng nề về tinh thần, tâm lý cho nạn nhân.",
+                    "C. Không gây ảnh hưởng gì đáng kể.",
+                    "D. Tạo môi trường lớp học thân thiện."
+                ],
+                answer: 1,
+                explanation: "Bắt nạt qua mạng bằng cách dùng lời nói xúc phạm, hình ảnh chế nhạo gây tác động xấu đến tâm lý và tinh thần nạn nhân[span_40](start_span)[span_40](end_span)[span_41](start_span)[span_41](end_span)."
+            },
+            {
+                id: 39,
+                topic: "Chủ đề 3: Đạo đức, pháp luật và văn hóa số",
+                question: "Khi phát hiện tài khoản mạng xã hội của người khác bị kẻ xấu mạo danh nhằm mục đích lừa đảo, em nên làm gì?",
+                options: [
+                    "A. Hùa theo để trêu chọc nạn nhân.",
+                    "B. Cảnh giác, báo cáo (report) tài khoản giả mạo đó cho quản trị viên mạng xã hội.",
+                    "C. Chia sẻ bài viết lừa đảo giúp họ.",
+                    "D. Giữ im lặng và bỏ qua."
+                ],
+                answer: 1,
+                explanation: "Cần cảnh giác và thực hiện các biện pháp an toàn như báo cáo tài khoản giả mạo, bảo vệ thông tin."
+            },
+            {
+                id: 40,
+                topic: "Chủ đề 3: Đạo đức, pháp luật và văn hóa số",
+                question: "Câu nói nào sau đây phản ánh ĐÚNG tinh thần ứng xử trên không gian mạng?",
+                options: [
+                    "A. 'Thế giới ảo, trách nhiệm thật.'",
+                    "B. 'Lên mạng là tự do tuyệt đối, không cần quan tâm ai.'",
+                    "C. 'Nói xấu người khác trên mạng không phạm tội.'",
+                    "D. 'Bí mật thông tin người khác là quyền của mình.'"
+                ],
+                answer: 0,
+                explanation: "Không gian mạng tuy là môi trường số nhưng mọi hành vi ứng xử đều chịu sự điều chỉnh của pháp luật và chuẩn mực đạo đức ngoài đời thực."
+            }
+        ];
+
+        function startQuiz() {
+            document.getElementById('intro-card').classList.add('hidden');
+            const form = document.getElementById('quiz-form');
+            form.classList.remove('hidden');
+
+            const container = document.getElementById('questions-container');
+            container.innerHTML = '';
+
+            questionsData.forEach((q, index) => {
+                const card = document.createElement('div');
+                card.className = 'bg-white rounded-xl shadow-sm border border-slate-200 p-6 question-card';
+                
+                let optionsHtml = '';
+                q.options.forEach((opt, optIndex) => {
+                    optionsHtml += `
+                        <label class="flex items-start space-x-3 p-2.5 rounded-lg hover:bg-slate-50 cursor-pointer transition-colors border border-transparent hover:border-slate-200">
+                            <input type="radio" name="q${q.id}" value="${optIndex}" class="mt-1 w-4 h-4 text-indigo-600 focus:ring-indigo-500 border-slate-300">
+                            <span class="text-slate-700 text-sm md:text-base">${opt}</span>
+                        </label>
+                    `;
+                });
+
+                card.innerHTML = `
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-3 gap-2">
+                        <span class="text-xs font-semibold uppercase tracking-wider px-2.5 py-1 bg-indigo-50 text-indigo-700 rounded-full">${q.topic}</span>
+                        <span class="text-xs font-medium text-slate-400">Câu hỏi ${index + 1}/40</span>
+                    </div>
+                    <p class="text-slate-800 font-medium mb-4 text-base md:text-lg"><span class="font-bold text-indigo-600">Câu ${index + 1}:</span> ${q.question}</p>
+                    <div class="space-y-2 mb-2">
+                        ${optionsHtml}
+                    </div>
+                    <div id="feedback-${q.id}" class="hidden mt-3 p-3 rounded-lg text-sm"></div>
+                `;
+                container.appendChild(card);
+            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function submitQuiz() {
+            let score = 0;
+            let unanswered = false;
+
+            questionsData.forEach((q) => {
+                const selected = document.querySelector(`input[name="q${q.id}"]:checked`);
+                if (!selected) {
+                    unanswered = true;
+                }
+            });
+
+            if (unanswered) {
+                alert('Vui lòng trả lời tất cả các câu hỏi trước khi nộp bài!');
+                return;
+            }
+
+            questionsData.forEach((q) => {
+                const selected = document.querySelector(`input[name="q${q.id}"]:checked`);
+                const userAns = parseInt(selected.value);
+                const feedbackDiv = document.getElementById(`feedback-${q.id}`);
+                
+                feedbackDiv.classList.remove('hidden');
+                
+                if (userAns === q.answer) {
+                    score++;
+                    feedbackDiv.className = 'mt-3 p-3 rounded-lg text-sm bg-emerald-50 border border-emerald-200 text-emerald-800';
+                    feedbackDiv.innerHTML = `<strong>Chính xác!</strong> ${q.explanation}`;
+                } else {
+                    feedbackDiv.className = 'mt-3 p-3 rounded-lg text-sm bg-rose-50 border border-rose-200 text-rose-800';
+                    feedbackDiv.innerHTML = `<strong>Chưa chính xác.</strong> Đáp án đúng là: <strong>${q.options[q.answer]}</strong>. ${q.explanation}`;
+                }
+            });
+
+            // Khóa các lựa chọn sau khi nộp bài
+            const inputs = document.querySelectorAll('input[type="radio"]');
+            inputs.forEach(input => input.disabled = true);
+
+            // Cuộn đến bảng kết quả
+            const resultContainer = document.getElementById('result-container');
+            resultContainer.classList.remove('hidden');
+            document.getElementById('score-display').innerText = `${score} / 40 điểm`;
+            
+            let message = '';
+            const percentage = (score / 40) * 100;
+            if (percentage === 100) {
+                message = 'Xuất sắc! Em đã trả lời đúng toàn bộ các câu hỏi trắc nghiệm!';
+            } else if (percentage >= 80) {
+                message = 'Rất tốt! Em đã nắm rất vững kiến thức các chủ đề 1, 2 và 3!';
+            } else if (percentage >= 50) {
+                message = 'Khá tốt! Tuy nhiên em nên xem lại một số nội dung còn nhầm lẫn nhé.';
+            } else {
+                message = 'Cố gắng lên nhé! Em nên đọc lại sách giáo khoa Tin học 9 để nắm chắc kiến thức hơn.';
+            }
+            document.getElementById('feedback-message').innerText = message;
+            
+            resultContainer.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function resetQuiz() {
+            document.getElementById('result-container').classList.add('hidden');
+            startQuiz();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
